@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Cancel Booking - Sports Management Platform{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+    <h2 class="text-3xl font-bold mb-6 text-gray-800">Cancel Booking</h2>
+    
+    <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+        <p class="text-red-800 font-semibold mb-2">Are you sure you want to cancel this booking?</p>
+        <div class="text-gray-700">
+            <p><strong>Facility:</strong> {{ booking.facility.name }}</p>
+            <p><strong>Date:</strong> {{ booking.booking_date }}</p>
+            <p><strong>Time:</strong> {{ booking.start_time }} - {{ booking.end_time }}</p>
+            <p><strong>Cost:</strong> ${{ booking.total_cost }}</p>
+        </div>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="flex space-x-4">
+            <button type="submit" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg transition">
+                Yes, Cancel Booking
+            </button>
+            <a href="{% url 'my_bookings' %}" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 rounded-lg transition text-center">
+                No, Keep Booking
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

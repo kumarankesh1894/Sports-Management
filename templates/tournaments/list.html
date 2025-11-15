@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Tournaments - Sports Management Platform{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h2 class="text-3xl font-bold text-gray-800 mb-2">Tournaments & Leagues</h2>
+    <p class="text-gray-600">Join exciting competitions and tournaments</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {% for tournament in tournaments %}
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+        <div class="h-48 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center">
+            <i class="fas fa-trophy text-white text-6xl"></i>
+        </div>
+        <div class="p-6">
+            <h3 class="text-2xl font-bold mb-2">{{ tournament.name }}</h3>
+            <p class="text-green-600 mb-4">{{ tournament.get_tournament_type_display }}</p>
+            <p class="text-gray-600 mb-4">{{ tournament.description|truncatewords:20 }}</p>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <i class="fas fa-calendar text-gray-400"></i>
+                    <span class="ml-2 text-gray-600 text-sm">{{ tournament.start_date }}</span>
+                </div>
+                <div>
+                    <i class="fas fa-users text-gray-400"></i>
+                    <span class="ml-2 text-gray-600 text-sm">{{ tournament.max_teams }} teams</span>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <span class="px-3 py-1 rounded-full text-sm font-semibold
+                    {% if tournament.status == 'upcoming' %}bg-blue-100 text-blue-800
+                    {% elif tournament.status == 'ongoing' %}bg-green-100 text-green-800
+                    {% elif tournament.status == 'completed' %}bg-gray-100 text-gray-800
+                    {% else %}bg-red-100 text-red-800{% endif %}">
+                    {{ tournament.get_status_display }}
+                </span>
+            </div>
+            
+            <a href="{% url 'tournament_detail' tournament.pk %}" class="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-2 rounded-lg transition">
+                View Details
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-2 text-center py-12">
+        <p class="text-gray-600">No tournaments available at the moment.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

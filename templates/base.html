@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Sports Management Platform{% endblock %}</title>
+    {% load static %}
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .navbar-brand {
+        font-family: "Arial", sans-serif;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white shadow-lg">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <a
+              href="{% url 'home' %}"
+              class="flex items-center space-x-2 navbar-brand text-xl"
+            >
+              <i class="fas fa-dumbbell"></i>
+              <span>SportsPro</span>
+            </a>
+            <div class="hidden md:flex space-x-4">
+              <a
+                href="{% url 'home' %}"
+                class="hover:bg-blue-700 px-3 py-2 rounded transition"
+                >Home</a
+              >
+              <a
+                href="{% url 'facilities' %}"
+                class="hover:bg-blue-700 px-3 py-2 rounded transition"
+                >Facilities</a
+              >
+              <a
+                href="{% url 'equipment' %}"
+                class="hover:bg-blue-700 px-3 py-2 rounded transition"
+                >Equipment</a
+              >
+              <a
+                href="{% url 'tournaments' %}"
+                class="hover:bg-blue-700 px-3 py-2 rounded transition"
+                >Tournaments</a
+              >
+              {% if user.is_authenticated %}
+              <a
+                href="{% url 'my_bookings' %}"
+                class="hover:bg-blue-700 px-3 py-2 rounded transition"
+                >My Bookings</a
+              >
+              <a
+                href="{% url 'my_rentals' %}"
+                class="hover:bg-blue-700 px-3 py-2 rounded transition"
+                >My Rentals</a
+              >
+              {% endif %}
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            {% if user.is_authenticated %}
+            <div class="dropdown relative">
+              <button
+                class="flex items-center space-x-2 hover:bg-blue-700 px-3 py-2 rounded transition"
+              >
+                <i class="fas fa-user-circle"></i>
+                <span>{{ user.username }}</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div
+                class="dropdown-menu hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10"
+              >
+                <a
+                  href="{% url 'profile' %}"
+                  class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >Profile</a
+                >
+                {% if user.is_staff or user.role == 'admin' %}
+                <a
+                  href="{% url 'admin_dashboard' %}"
+                  class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >Admin Dashboard</a
+                >
+                {% endif %}
+                <form
+                  method="post"
+                  action="{% url 'logout' %}"
+                  style="margin: 0"
+                >
+                  {% csrf_token %}
+                  <button
+                    type="submit"
+                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </form>
+              </div>
+            </div>
+            {% else %}
+            <a
+              href="{% url 'login' %}"
+              class="hover:bg-blue-700 px-3 py-2 rounded transition"
+              >Login</a
+            >
+            <a
+              href="{% url 'register' %}"
+              class="bg-white text-blue-600 hover:bg-gray-100 px-3 py-2 rounded transition"
+              >Sign Up</a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mx-auto px-4 mt-4">
+      {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags }} mb-4 p-4 rounded-lg shadow {% if message.tags == 'error' %}bg-red-100 text-red-800{% elif message.tags == 'success' %}bg-green-100 text-green-800{% elif message.tags == 'warning' %}bg-yellow-100 text-yellow-800{% else %}bg-blue-100 text-blue-800{% endif %}"
+      >
+        <div class="flex items-center">
+          <i
+            class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %} mr-2"
+          ></i>
+          {{ message }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-12">
+      <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-lg font-bold mb-4">SportsPro</h3>
+            <p class="text-gray-400">
+              Your one-stop solution for sports facility management and booking.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li>
+                <a href="{% url 'home' %}" class="hover:text-white">Home</a>
+              </li>
+              <li>
+                <a href="{% url 'facilities' %}" class="hover:text-white"
+                  >Facilities</a
+                >
+              </li>
+              <li>
+                <a href="{% url 'equipment' %}" class="hover:text-white"
+                  >Equipment</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Services</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li>
+                <a href="{% url 'tournaments' %}" class="hover:text-white"
+                  >Tournaments</a
+                >
+              </li>
+              <li><a href="#" class="hover:text-white">Memberships</a></li>
+              <li><a href="#" class="hover:text-white">Bookings</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Contact Us</h4>
+            <p class="text-gray-400">
+              <i class="fas fa-envelope mr-2"></i>info@sportspro.com<br />
+              <i class="fas fa-phone mr-2"></i>+1 234 567 8900
+            </p>
+          </div>
+        </div>
+        <div
+          class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400"
+        >
+          <p>&copy; 2024 SportsPro. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+      // Dropdown menu toggle
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = document.querySelectorAll(".dropdown");
+        dropdowns.forEach((dropdown) => {
+          const button = dropdown.querySelector("button");
+          const menu = dropdown.querySelector(".dropdown-menu");
+
+          button.addEventListener("click", function (e) {
+            e.stopPropagation();
+            dropdowns.forEach((d) => {
+              if (d !== dropdown) {
+                d.querySelector(".dropdown-menu").classList.add("hidden");
+              }
+            });
+            menu.classList.toggle("hidden");
+          });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function () {
+          dropdowns.forEach((dropdown) => {
+            dropdown.querySelector(".dropdown-menu").classList.add("hidden");
+          });
+        });
+      });
+    </script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Sports Management Platform{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+    <h2 class="text-3xl font-bold mb-6 text-gray-800">My Profile</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="{{ form.first_name.id_for_label }}" class="block text-gray-700 font-semibold mb-2">First Name</label>
+                {{ form.first_name }}
+            </div>
+            
+            <div>
+                <label for="{{ form.last_name.id_for_label }}" class="block text-gray-700 font-semibold mb-2">Last Name</label>
+                {{ form.last_name }}
+            </div>
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.email.id_for_label }}" class="block text-gray-700 font-semibold mb-2">Email</label>
+            {{ form.email }}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.phone_number.id_for_label }}" class="block text-gray-700 font-semibold mb-2">Phone Number</label>
+            {{ form.phone_number }}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.address.id_for_label }}" class="block text-gray-700 font-semibold mb-2">Address</label>
+            {{ form.address }}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.date_of_birth.id_for_label }}" class="block text-gray-700 font-semibold mb-2">Date of Birth</label>
+            {{ form.date_of_birth }}
+        </div>
+        
+        <div class="mb-6">
+            <label for="{{ form.profile_picture.id_for_label }}" class="block text-gray-700 font-semibold mb-2">Profile Picture</label>
+            {{ form.profile_picture }}
+        </div>
+        
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition">
+            Update Profile
+        </button>
+    </form>
+</div>
+
+<style>
+    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea, input[type="file"] {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+    }
+    textarea {
+        min-height: 100px;
+    }
+</style>
+{% endblock %}
+

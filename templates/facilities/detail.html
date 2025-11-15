@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ facility.name }} - Sports Management Platform{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+    <div class="h-64 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
+        <i class="fas fa-building text-white text-8xl"></i>
+    </div>
+    <div class="p-8">
+        <h1 class="text-4xl font-bold mb-4">{{ facility.name }}</h1>
+        <p class="text-blue-600 text-xl mb-6">{{ facility.get_facility_type_display }}</p>
+        <p class="text-gray-700 mb-6">{{ facility.description }}</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="flex items-center">
+                <i class="fas fa-users text-blue-600 text-2xl mr-3"></i>
+                <div>
+                    <p class="font-semibold">Capacity</p>
+                    <p class="text-gray-600">{{ facility.capacity }} people</p>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <i class="fas fa-dollar-sign text-green-600 text-2xl mr-3"></i>
+                <div>
+                    <p class="font-semibold">Hourly Rate</p>
+                    <p class="text-gray-600">${{ facility.hourly_rate }}</p>
+                </div>
+            </div>
+        </div>
+        
+        {% if user.is_authenticated %}
+        <a href="{% url 'create_booking' facility.pk %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+            Book Now
+        </a>
+        {% else %}
+        <a href="{% url 'login' %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+            Login to Book
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+{% if availabilities %}
+<div class="bg-white rounded-lg shadow-lg p-8">
+    <h2 class="text-2xl font-bold mb-6">Availability Schedule</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for avail in availabilities %}
+        <div class="border border-gray-200 rounded-lg p-4">
+            <p class="font-semibold text-blue-600">{{ avail.get_day_of_week_display }}</p>
+            <p class="text-gray-600">{{ avail.start_time }} - {{ avail.end_time }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
